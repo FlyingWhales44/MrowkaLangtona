@@ -36,8 +36,9 @@ namespace MrowkaLangtona
 
         private void GameStep(object sender, EventArgs e)
         {
-            engine.game();
+            
             ConvertCells();
+            engine.game();
         }
 
         //private void OnClick(object sender, EventArgs e)
@@ -57,8 +58,8 @@ namespace MrowkaLangtona
 
         private void ConvertCells()
         {
-            Canvas temp;
-            for (int i = 0; i < engine.boardX ; i++)
+            Canvas temp,ant;
+            for (int i = 0; i < engine.boardX ; i++)//zoptymalizuj wyswietlanie
                 for (int j = 0; j < engine.boardY ; j++)
                 {
                     temp = CanvasList.SingleOrDefault(r => r.Name == "I" + i + "I" + j);
@@ -69,16 +70,16 @@ namespace MrowkaLangtona
                         else
                             temp.Background = Brushes.Gray;
                     }
-
                 }
-
+            ant = CanvasList.SingleOrDefault(r => r.Name == "I" + engine.ant.X + "I" + engine.ant.Y);
+            ant.Background = Brushes.Red;
         }
 
-        private void DrawAnt()
-        {
-            Canvas antImagePosition = CanvasList.SingleOrDefault(r => r.Name == "I" + engine.ant.X + "I" + engine.ant.Y);
-            antImagePosition.Ad
-        }
+        //private void DrawAnt()
+        //{
+        //    Canvas antImagePosition = CanvasList.SingleOrDefault(r => r.Name == "I" + engine.ant.X + "I" + engine.ant.Y);
+        //    antImagePosition.Ad
+        //}
 
         private void GetCord(string name, out int x, out int y)
         {
@@ -95,7 +96,7 @@ namespace MrowkaLangtona
             Board.ColumnDefinitions.Clear();
             Board.Children.Clear();
 
-            antImage = Bitmap.FromFile("ant_image.jpg");
+           // antImage = Bitmap.FromFile("ant_image.jpg");
 
             for (int j = 0; j < x; j++)
                 Board.ColumnDefinitions.Add(new ColumnDefinition());
