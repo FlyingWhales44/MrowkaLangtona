@@ -18,7 +18,7 @@ namespace MrowkaLangtona
         public Ant ant;
 
         private List<List<bool>> boardBuff { get; set; }     
-        private int boardX,boardY;
+        public int boardX,boardY;
 
         public void game()
         {
@@ -70,10 +70,21 @@ namespace MrowkaLangtona
             }
         }
 
+        private void antSet()
+        {
+            ant.X = 15;
+            ant.Y = 15;
+            ant.Direction = 'S';
+        }
+
         public void set(int bX,int bY)
         {
             boardX = 30;
             boardY = 30;
+
+            ant = new Ant();
+
+            antSet();
 
             board = new List<List<bool>>();
 
@@ -81,7 +92,7 @@ namespace MrowkaLangtona
             {
                 board.Add(new List<bool>());
                 for (int j = 0; j < boardX; j++)
-                    board[i].Add(false);
+                    board[i].Add(true);
             }
         }
 

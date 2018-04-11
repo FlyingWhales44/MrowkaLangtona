@@ -6,7 +6,15 @@
         xmlns:local="clr-namespace:MrowkaLangtona"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="Board" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="411"/>
+        <Button x:Name="Start" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="10,289,0,0" VerticalAlignment="Top" Width="75"/>
+
     </Grid>
 </Window>
