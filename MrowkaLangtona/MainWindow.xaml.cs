@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Timers;
 
 namespace MrowkaLangtona
 {
@@ -21,7 +23,12 @@ namespace MrowkaLangtona
     public partial class MainWindow : Window
     {
         Engine engine;
-        List<Canvas> CanvasList;
+        List<Button> ButtonList;
+        DispatcherTimer UInterface;
+        Brush frozenWhite = new SolidColorBrush(Colors.Gray);
+        Brush frozenBlue = new SolidColorBrush(Colors.Blue);
+        
+        int AntPrevX, AntPrevY;
 
         public MainWindow()
         {
@@ -31,55 +38,63 @@ namespace MrowkaLangtona
 
             SetPlansza(30, 30);
 
-            Start.Click += new RoutedEventHandler(GameStep);
+            declareTimers();
+
+            Start.Click += new RoutedEventHandler(startGame);
         }
 
-        private void GameStep(object sender, EventArgs e)
+        private void declareTimers()
         {
-            
-            ConvertCells();
-            engine.game();
+            UInterface = new DispatcherTimer();
+            UInterface.Interval = TimeSpan.FromSeconds(0.2);
+            UInterface.Tick += new EventHandler(TickUI);
         }
 
-        //private void OnClick(object sender, EventArgs e)
-        //{
-        //    int x = 0, y = 0;
-        //    var canvas = (Canvas)sender;
+        private void startGame(object sender, EventArgs e)
+        {         
+            UInterface.Start();
+        }
 
-        //    if (canvas.Background == Brushes.DarkBlue)
-        //        canvas.Background = Brushes.Gray;
-        //    else
-        //        canvas.Background = Brushes.DarkBlue;
-
-        //    GetCord(canvas.Name, out x, out y);
-
-        //    engine.board[y][x] = !engine.board[y][x];
-        //}
+        private void TickUI(object sender, EventArgs e)
+        {
+            engine.game();
+            ConvertCells();
+        }
 
         private void ConvertCells()
         {
-            Canvas temp,ant;
-            for (int i = 0; i < engine.boardX ; i++)//zoptymalizuj wyswietlanie
-                for (int j = 0; j < engine.boardY ; j++)
+            Button temp;
+
+            for (int i = engine.ant.X - 3; i < engine.ant.Y + 3; i++)
+                for (int j = engine.ant.Y- 3; j < engine.ant.Y + 3; j++)
                 {
-                    temp = CanvasList.SingleOrDefault(r => r.Name == "I" + i + "I" + j);
-                    if (temp != null)
-                    {
+                    temp = ButtonList.SingleOrDefault(r => r.Name == "I" + i + "I" + j);
+
                         if (!engine.board[i][j])
-                            temp.Background = Brushes.DarkBlue;
+                            temp.Background = frozenBlue;
                         else
-                            temp.Background = Brushes.Gray;
-                    }
+                            temp.Background = frozenWhite;
                 }
-            ant = CanvasList.SingleOrDefault(r => r.Name == "I" + engine.ant.X + "I" + engine.ant.Y);
-            ant.Background = Brushes.Red;
+            ClearPrevAnt();
+            DrawAnt();
         }
 
-        //private void DrawAnt()
-        //{
-        //    Canvas antImagePosition = CanvasList.SingleOrDefault(r => r.Name == "I" + engine.ant.X + "I" + engine.ant.Y);
-        //    antImagePosition.Ad
-        //}
+        private void ClearPrevAnt()
+        {
+            Button ant = ButtonList.SingleOrDefault(r => r.Name == "I" + AntPrevY + "I" + AntPrevX);
+            ant.Content = null;
+        }
+
+        private void DrawAnt()
+        {
+            Button ant = ButtonList.SingleOrDefault(r => r.Name == "I" + engine.ant.Y + "I" + engine.ant.X);
+
+            Image antImg = new Image() { Source = new BitmapImage(new Uri("antimage.jpg", UriKind.Relative)) };
+            ant.Content = antImg;
+
+            AntPrevX = engine.ant.X;
+            AntPrevY = engine.ant.Y;
+        }
 
         private void GetCord(string name, out int x, out int y)
         {
@@ -90,31 +105,32 @@ namespace MrowkaLangtona
 
         private void SetPlansza(int x, int y)
         {
-            Canvas pole;
-            CanvasList = new List<Canvas>();
+            Button pole;
+            ButtonList = new List<Button>();
             Board.RowDefinitions.Clear();
             Board.ColumnDefinitions.Clear();
             Board.Children.Clear();
 
-           // antImage = Bitmap.FromFile("ant_image.jpg");
+            frozenBlue.Freeze();
+            frozenWhite.Freeze();
 
             for (int j = 0; j < x; j++)
+            {
                 Board.ColumnDefinitions.Add(new ColumnDefinition());
+            }
 
             for (int i = 0; i < y; i++)
                 Board.RowDefinitions.Add(new RowDefinition());
 
-            for (int i = 0; i < y ; i++)
+                    for (int i = 0; i < y ; i++)
                 for (int j = 0; j < x ; j++)
                 {
-                    pole = new Canvas();
-                    pole.Background = Brushes.Gray;
+                    pole = new Button();
+                    pole.Background = frozenWhite;
                     pole.Name = "I" + i + "I" + j;
                     pole.SetValue(Grid.RowProperty, i);
                     pole.SetValue(Grid.ColumnProperty, j);
-                   // pole.MouseDown += new MouseButtonEventHandler(OnClick);
-                    CanvasList.Add(pole);
-
+                    ButtonList.Add(pole);
                     Board.Children.Add(pole);
                 }
             engine.set(x, y);

@@ -12,12 +12,11 @@ namespace MrowkaLangtona
         public int Y { get; set; }
         public char Direction { get; set; } //N E S W (kierunki)
     }
+
     class Engine : Ant
     {
         public List<List<bool>> board { get; set; }
-        public Ant ant;
-
-        private List<List<bool>> boardBuff { get; set; }     
+        public Ant ant;  
         public int boardX,boardY;
 
         public void game()
@@ -74,7 +73,7 @@ namespace MrowkaLangtona
         {
             ant.X = 15;
             ant.Y = 15;
-            ant.Direction = 'S';
+            ant.Direction = 'N';
         }
 
         public void set(int bX,int bY)

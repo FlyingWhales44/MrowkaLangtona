@@ -13,8 +13,8 @@
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="Board" HorizontalAlignment="Left" Height="299" Margin="10,10,0,0" VerticalAlignment="Top" Width="411"/>
-        <Button x:Name="Start" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="10,289,0,0" VerticalAlignment="Top" Width="75"/>
+        <Grid x:Name="Board" Margin="10,10,0,0" Grid.Column="0"/>
+        <Button x:Name="Start" Content="Button" Grid.Column="1" Margin="10,289,0,0" HorizontalAlignment="Left" Width="66" Height="20" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
