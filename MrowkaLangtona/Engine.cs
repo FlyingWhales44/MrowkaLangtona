@@ -28,7 +28,9 @@ namespace MrowkaLangtona
                 {
                     case 'N':
                         ant.Direction = 'W';
-                        ant.X = (ant.X - 1) % boardX;
+                        ant.X = ant.X - 1;
+                        if (ant.X == -1)
+                            ant.X = boardX - 1;
                         break;
                     case 'E':
                         ant.Direction = 'N';
@@ -40,7 +42,9 @@ namespace MrowkaLangtona
                         break;
                     case 'W':
                         ant.Direction = 'S';
-                        ant.Y = (ant.Y - 1) % boardY;
+                        ant.Y = ant.Y - 1;
+                        if (ant.Y == -1)
+                            ant.Y = boardY - 1;
                         break;
                 }
             }
@@ -55,11 +59,15 @@ namespace MrowkaLangtona
                         break;
                     case 'E':
                         ant.Direction = 'S';
-                        ant.Y = (ant.Y - 1) % boardY;
+                        ant.Y = ant.Y - 1;
+                        if (ant.Y == -1)
+                            ant.Y = boardY - 1;
                         break;
                     case 'S':
                         ant.Direction = 'W';
-                        ant.X = (ant.X - 1) % boardX;
+                        ant.X = ant.X - 1;
+                        if (ant.X == -1)
+                            ant.X = boardX - 1;
                         break;
                     case 'W':
                         ant.Direction = 'N';
@@ -69,21 +77,19 @@ namespace MrowkaLangtona
             }
         }
 
-        private void antSet()
+        public void antSet(int x,int y,char dir)
         {
-            ant.X = 15;
-            ant.Y = 15;
-            ant.Direction = 'N';
+            ant.X = x;
+            ant.Y = y;
+            ant.Direction = dir;
         }
 
         public void set(int bX,int bY)
         {
-            boardX = 30;
-            boardY = 30;
+            boardX = bX;
+            boardY = bY;
 
             ant = new Ant();
-
-            antSet();
 
             board = new List<List<bool>>();
 

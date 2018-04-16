@@ -14,7 +14,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="Board" Margin="10,10,0,0" Grid.Column="0"/>
-        <Button x:Name="Start" Content="Button" Grid.Column="1" Margin="10,289,0,0" HorizontalAlignment="Left" Width="66" Height="20" VerticalAlignment="Top"/>
+        <Button x:Name="Start" Content="Start/Stop" Grid.Column="1" Margin="10,289,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66"/>
+        <TextBox x:Name="TextBoardX" Grid.Column="1" Margin="10,223,0,0" TextWrapping="Wrap" Text="20" HorizontalAlignment="Left" Width="66" Height="23" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextBoardY" Grid.Column="1" Margin="10,195,0,0" TextWrapping="Wrap" Text="20" HorizontalAlignment="Left" Width="66" Height="23" VerticalAlignment="Top"/>
+        <Button x:Name="AntPositionN" Content="N" Grid.Column="1" Margin="28,120,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
+        <Button x:Name="AntPositionS" Content="S" Grid.Column="1" Margin="28,170,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
+        <Button x:Name="AntPositionE" Content="E" Grid.Column="1" Margin="46,145,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
+        <Button x:Name="AntPositionW" Content="W" Grid.Column="1" Margin="10,145,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30"/>
+        <Button x:Name="Save" Content="Save" Grid.Column="1" Margin="10,251,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66"/>
 
     </Grid>
 </Window>

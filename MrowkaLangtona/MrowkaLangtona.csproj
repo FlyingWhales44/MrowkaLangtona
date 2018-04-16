@@ -95,7 +95,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="antimage.jpg" />
+    <Resource Include="ant.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="antE.jpg" />
+    <Resource Include="antS.jpg" />
+    <Resource Include="antW.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

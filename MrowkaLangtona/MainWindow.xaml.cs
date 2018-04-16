@@ -25,10 +25,13 @@ namespace MrowkaLangtona
         Engine engine;
         List<Button> ButtonList;
         DispatcherTimer UInterface;
+
         Brush frozenWhite = new SolidColorBrush(Colors.Gray);
         Brush frozenBlue = new SolidColorBrush(Colors.Blue);
-        
+
+        Image antImg;
         int AntPrevX, AntPrevY;
+        bool EngineTicking;
 
         public MainWindow()
         {
@@ -36,10 +39,17 @@ namespace MrowkaLangtona
 
             engine = new Engine();
 
-            SetPlansza(30, 30);
+            EngineTicking = true;
+
+            SetPlansza(20, 20);
 
             declareTimers();
 
+            AntPositionN.Click += new RoutedEventHandler(antDirN);
+            AntPositionS.Click += new RoutedEventHandler(antDirS);
+            AntPositionW.Click += new RoutedEventHandler(antDirW);
+            AntPositionE.Click += new RoutedEventHandler(antDirE);
+            Save.Click += new RoutedEventHandler(boardset);
             Start.Click += new RoutedEventHandler(startGame);
         }
 
@@ -48,6 +58,43 @@ namespace MrowkaLangtona
             UInterface = new DispatcherTimer();
             UInterface.Interval = TimeSpan.FromSeconds(0.2);
             UInterface.Tick += new EventHandler(TickUI);
+        }
+
+        private void boardset(object sender, EventArgs e)
+        {
+            SetPlansza(Convert.ToInt32(TextBoardX.Text), (Convert.ToInt32(TextBoardY.Text)));
+        }
+
+        private void antDirN(object sender, EventArgs e)
+        {
+            engine.antSet(engine.ant.X, engine.ant.Y, 'N');
+
+            ClearPrevAnt();
+            DrawAnt();
+        }
+
+        private void antDirS(object sender, EventArgs e)
+        {
+            engine.antSet(engine.ant.X, engine.ant.Y, 'S');
+
+            ClearPrevAnt();
+            DrawAnt();
+        }
+
+        private void antDirE(object sender, EventArgs e)
+        {
+            engine.antSet(engine.ant.X, engine.ant.Y, 'E');
+
+            ClearPrevAnt();
+            DrawAnt();
+        }
+
+        private void antDirW(object sender, EventArgs e)
+        {
+            engine.antSet(engine.ant.X, engine.ant.Y, 'W');
+
+            ClearPrevAnt();
+            DrawAnt();
         }
 
         private void startGame(object sender, EventArgs e)
@@ -63,18 +110,20 @@ namespace MrowkaLangtona
 
         private void ConvertCells()
         {
-            Button temp;
+            Button temp = ButtonList.SingleOrDefault(r => r.Name == "I" + engine.ant.Y + "I" + engine.ant.X);
 
-            for (int i = engine.ant.X - 3; i < engine.ant.Y + 3; i++)
-                for (int j = engine.ant.Y- 3; j < engine.ant.Y + 3; j++)
-                {
-                    temp = ButtonList.SingleOrDefault(r => r.Name == "I" + i + "I" + j);
+            if (!engine.board[engine.ant.Y][engine.ant.X])
+                temp.Background = frozenBlue;
+            else
+                temp.Background = frozenWhite;
+          
+            temp = ButtonList.SingleOrDefault(r => r.Name == "I" + AntPrevY + "I" + AntPrevX);
 
-                        if (!engine.board[i][j])
-                            temp.Background = frozenBlue;
-                        else
-                            temp.Background = frozenWhite;
-                }
+            if (!engine.board[AntPrevY][AntPrevX])
+                temp.Background = frozenBlue;
+            else
+                temp.Background = frozenWhite;
+
             ClearPrevAnt();
             DrawAnt();
         }
@@ -88,12 +137,45 @@ namespace MrowkaLangtona
         private void DrawAnt()
         {
             Button ant = ButtonList.SingleOrDefault(r => r.Name == "I" + engine.ant.Y + "I" + engine.ant.X);
+            string source="";
 
-            Image antImg = new Image() { Source = new BitmapImage(new Uri("antimage.jpg", UriKind.Relative)) };
+            switch (engine.ant.Direction)
+            {
+                case 'N':
+                    source = "ant.jpg";
+                    break;
+                case 'E':
+                    source = "antE.jpg";
+                    break;
+                case 'S':
+                    source = "antS.jpg";
+                    break;
+                case 'W':
+                    source = "antW.jpg";
+                    break;
+            }
+
+            antImg = new Image() { Source = new BitmapImage(new Uri(source, UriKind.Relative)) };
+
             ant.Content = antImg;
 
             AntPrevX = engine.ant.X;
             AntPrevY = engine.ant.Y;
+        }
+
+        private void antPositionClick(object sender, EventArgs e)
+        {
+           if(EngineTicking)
+            {
+                var button = (Button)sender;
+
+                string[] Cord = button.Name.Split('I');
+
+                engine.antSet(Convert.ToInt32(Cord[2]), Convert.ToInt32(Cord[1]), 'N');
+
+                ClearPrevAnt();
+                DrawAnt();     
+            }
         }
 
         private void GetCord(string name, out int x, out int y)
@@ -122,14 +204,15 @@ namespace MrowkaLangtona
             for (int i = 0; i < y; i++)
                 Board.RowDefinitions.Add(new RowDefinition());
 
-                    for (int i = 0; i < y ; i++)
+            for (int i = 0; i < y ; i++)
                 for (int j = 0; j < x ; j++)
                 {
                     pole = new Button();
                     pole.Background = frozenWhite;
                     pole.Name = "I" + i + "I" + j;
-                    pole.SetValue(Grid.RowProperty, i);
-                    pole.SetValue(Grid.ColumnProperty, j);
+                    pole.SetValue(Grid.RowProperty, j);
+                    pole.SetValue(Grid.ColumnProperty, i);
+                    pole.Click += new RoutedEventHandler(antPositionClick);
                     ButtonList.Add(pole);
                     Board.Children.Add(pole);
                 }
