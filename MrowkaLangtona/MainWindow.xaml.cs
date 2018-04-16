@@ -39,7 +39,7 @@ namespace MrowkaLangtona
 
             engine = new Engine();
 
-            EngineTicking = true;
+            EngineTicking = false;
 
             SetPlansza(20, 20);
 
@@ -56,7 +56,7 @@ namespace MrowkaLangtona
         private void declareTimers()
         {
             UInterface = new DispatcherTimer();
-            UInterface.Interval = TimeSpan.FromSeconds(0.2);
+            UInterface.Interval = TimeSpan.FromSeconds(0.15);
             UInterface.Tick += new EventHandler(TickUI);
         }
 
@@ -98,8 +98,17 @@ namespace MrowkaLangtona
         }
 
         private void startGame(object sender, EventArgs e)
-        {         
-            UInterface.Start();
+        {
+            if (!EngineTicking)
+            {
+                UInterface.Start();
+                EngineTicking = true;
+            }
+            else
+            {
+                UInterface.Stop();
+                EngineTicking = false;
+            }
         }
 
         private void TickUI(object sender, EventArgs e)
@@ -165,7 +174,7 @@ namespace MrowkaLangtona
 
         private void antPositionClick(object sender, EventArgs e)
         {
-           if(EngineTicking)
+           if(!EngineTicking)
             {
                 var button = (Button)sender;
 
